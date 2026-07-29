@@ -532,7 +532,11 @@
     function openPreview(){
       popup.classList.add('show');
       backdrop.classList.add('show');
-      try { video.currentTime = 0; video.play(); } catch(e){}
+      video.currentTime = 0;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(function(){});
+      }
     }
     function closePreview(){
       popup.classList.remove('show');
