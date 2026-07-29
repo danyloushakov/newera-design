@@ -74,7 +74,7 @@
     border:7px solid transparent; border-bottom-color:var(--line);
   }
   .practice-popup.show{opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);}
-  .practice-popup video{width:100%; display:block; border-radius:9px; background:#000;}
+  .practice-popup video{width:100%; aspect-ratio:16/9; display:block; border-radius:9px; background:#000;}
   .practice-goto{
     display:block; text-align:center; margin-top:8px; font-family:var(--font-mono); font-size:11px;
     color:#2dd496; text-decoration:none; padding:6px;
@@ -258,7 +258,7 @@
       <div class="practice-trigger" id="practiceTrigger">
         <a href="#practice" class="btn-practice" id="practiceLink">Практика</a>
         <div class="practice-popup" id="practicePopup">
-          <video id="practiceVideo" muted loop playsinline preload="none" src="practice-preview.mp4"></video>
+          <video id="practiceVideo" muted loop playsinline autoplay preload="auto" src="practice-preview.mp4"></video>
           <a href="#practice" class="practice-goto" id="practiceGoto">Перейти до розділу →</a>
         </div>
       </div>
@@ -523,25 +523,20 @@
   (function(){
     const trigger = document.getElementById('practiceTrigger');
     const popup = document.getElementById('practicePopup');
-    const video = document.getElementById('practiceVideo');
     const backdrop = document.getElementById('practiceBackdrop');
     const link = document.getElementById('practiceLink');
     const goto_ = document.getElementById('practiceGoto');
     const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
+    // Відео грає безперервно у фоні (autoplay+loop) — тут лише показуємо/ховаємо попап,
+    // щоб при наведенні не було перезавантаження чи "стрибка" кадру.
     function openPreview(){
       popup.classList.add('show');
       backdrop.classList.add('show');
-      video.currentTime = 0;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function(){});
-      }
     }
     function closePreview(){
       popup.classList.remove('show');
       backdrop.classList.remove('show');
-      video.pause();
     }
 
     if(canHover){
