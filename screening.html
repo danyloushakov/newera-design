@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Скринінг перед вступом — Graphic Design NEW ERA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --bg:#0a0a0f; --bg-elev:#14141d; --bg-elev2:#1b1b26;
+    --text:#f4f3f6; --text-dim:#9997a3;
+    --red:#e8352a; --red-glow:rgba(232,53,42,.35);
+    --violet:#7c5cfc; --violet-glow:rgba(124,92,252,.35);
+    --teal:#2dd496; --amber:#e0a83a; --line:#26262f;
+    --font-display:'Unbounded',sans-serif; --font-body:'Manrope',sans-serif; --font-mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px;}
+
+  nav.topnav{padding:22px 0;border-bottom:1px solid var(--line);}
+  .brandmark{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:15px;text-decoration:none;}
+  .brandmark .dot{width:9px;height:9px;background:var(--red);box-shadow:0 0 10px var(--red-glow);border-radius:50%;}
+
+  .screen{display:none;padding:64px 0;}
+  .screen.active{display:block;}
+
+  /* INTRO */
+  .eyebrow{font-family:var(--font-mono);font-size:12.5px;color:var(--violet);text-transform:uppercase;letter-spacing:.08em;margin-bottom:18px;}
+  h1{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,4.5vw,42px);text-transform:uppercase;line-height:1.15;margin:0 0 22px;}
+  .lead{color:var(--text-dim);font-size:16.5px;max-width:56ch;margin:0 0 20px;}
+  .lead b{color:var(--text);}
+  .rules{background:var(--bg-elev);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin:28px 0 36px;}
+  .rules p{margin:0 0 10px;font-size:14.5px;color:var(--text-dim);}
+  .rules p:last-child{margin-bottom:0;}
+  .rules b{color:var(--text);}
+
+  .btn{
+    font-family:var(--font-mono);font-size:14px;font-weight:600;padding:16px 30px;border-radius:999px;
+    text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;
+    background:linear-gradient(90deg,var(--red),var(--violet));color:#fff;box-shadow:0 0 30px var(--red-glow);
+    transition:transform .15s;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-ghost{background:var(--bg-elev);color:var(--text);border:1px solid var(--line);box-shadow:none;}
+
+  /* QUIZ */
+  .progress-track{height:4px;background:var(--line);border-radius:2px;margin-bottom:32px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--red),var(--violet));border-radius:2px;transition:width .3s ease;width:0%;}
+  .q-counter{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em;}
+  .q-scenario{font-family:var(--font-mono);font-size:12px;color:var(--amber);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;}
+  .q-text{font-family:var(--font-display);font-weight:600;font-size:22px;line-height:1.4;margin:0 0 30px;}
+  .options{display:flex;flex-direction:column;gap:12px;}
+  .option{
+    text-align:left;background:var(--bg-elev);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;font-family:var(--font-body);font-size:15px;color:var(--text);cursor:pointer;
+    transition:border-color .15s,background .15s;
+  }
+  .option:hover{border-color:var(--violet);background:var(--bg-elev2);}
+  .option .opt-letter{font-family:var(--font-mono);color:var(--violet);margin-right:10px;font-weight:600;}
+
+  /* RESULT */
+  .result-badge{
+    display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;
+    padding:9px 18px;border-radius:999px;margin-bottom:24px;text-transform:uppercase;letter-spacing:.05em;
+  }
+  .badge-pass{background:rgba(45,212,150,.12);color:var(--teal);border:1px solid rgba(45,212,150,.35);}
+  .badge-mid{background:rgba(224,168,58,.12);color:var(--amber);border:1px solid rgba(224,168,58,.35);}
+  .badge-flag{background:rgba(232,53,42,.12);color:#ff8f88;border:1px solid rgba(232,53,42,.35);}
+  .result-score{font-family:var(--font-display);font-weight:900;font-size:56px;background:linear-gradient(90deg,var(--red),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:6px;}
+  .result-score-label{font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:32px;}
+  .result-text{font-size:16.5px;color:var(--text-dim);max-width:58ch;margin:0 0 32px;}
+  .result-text b{color:var(--text);}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;}
+
+  footer{padding:32px 0;border-top:1px solid var(--line);margin-top:40px;}
+  footer p{font-family:var(--font-mono);font-size:12px;color:#59575f;margin:0;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="wrap">
+    <a class="brandmark" href="index.html"><span class="dot"></span>NEW ERA</a>
+  </div>
+</nav>
+
+<!-- INTRO -->
+<div class="screen active" id="screen-intro">
+  <div class="wrap">
+    <div class="eyebrow">Крок 1 з 2 · Перед заявкою</div>
+    <h1>Скринінг перед вступом</h1>
+    <p class="lead">На курсі ми критикуємо роботи прямо й чесно — щотижня, вголос, перед усією групою. Це працює тільки якщо кожен вміє <b>приймати</b> критику і <b>давати</b> її, не переходячи на людину. Цей тест — не про те, «токсична ти людина чи ні». Це про те, як ти реально реагуєш у конкретних ситуаціях курсу.</p>
+    <div class="rules">
+      <p><b>7 коротких сценаріїв</b> — реальні ситуації з занять курсу.</p>
+      <p><b>Немає правильної відповіді «для галочки»</b> — обирай ту реакцію, яка найближче до твоєї справжньої.</p>
+      <p><b>Це фільтр, не вирок.</b> Проміжний результат означає коротку розмову перед стартом, не відмову.</p>
+    </div>
+    <div class="rules" style="margin-top:-16px;">
+      <input type="text" id="inName" placeholder="Ім'я" style="width:100%;padding:13px 16px;margin-bottom:10px;font-family:var(--font-body);font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:8px;">
+      <input type="email" id="inEmail" placeholder="Email" style="width:100%;padding:13px 16px;font-family:var(--font-body);font-size:15px;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:8px;">
+      <div id="introError" style="color:#ff8f88;font-family:var(--font-mono);font-size:12px;margin-top:10px;"></div>
+    </div>
+    <button class="btn" onclick="startQuiz()">Почати тест · 2 хвилини</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="q-counter" id="qCounter"></div>
+    <div class="q-scenario" id="qScenario"></div>
+    <h2 class="q-text" id="qText"></h2>
+    <div class="options" id="qOptions"></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="wrap">
+    <div class="result-badge" id="resultBadge"></div>
+    <div class="result-score" id="resultScore"></div>
+    <div class="result-score-label">із 14 можливих</div>
+    <p class="result-text" id="resultText"></p>
+    <div class="cta-row" id="resultCta"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap"><p>GRAPHIC DESIGN NEW ERA © 2026 · Nothing Impossible</p></div>
+</footer>
+
+<script>
+  // ============================================================
+  // НАЛАШТУВАННЯ SUPABASE — встав свої значення з Settings → API
+  // ============================================================
+  const SUPABASE_URL = "https://jqlalechnpzcmxsfzmyw.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_7VSnO_pe4SF9ou7mBk9t0g_AFYb68kx";
+  const supabaseClient = (SUPABASE_URL.startsWith("ВСТАВ") || SUPABASE_ANON_KEY.startsWith("ВСТАВ"))
+    ? null
+    : window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const questions = [
+    {
+      scenario: "Групова крит-сесія",
+      text: "Твою вправу з фруктами розкритикували жорстко: «ідея не читається за 2 секунди». Перша реакція?",
+      options: [
+        { t: "Пояснюю задум, наполягаю — просто недооцінили", s: -1 },
+        { t: "Питаю конкретно, що саме не читається і чому", s: 2 },
+        { t: "Мовчки ображаюсь, більше не показую роботи першим", s: -1 },
+        { t: "Огризаюсь на того, хто критикував", s: -2 },
+      ]
+    },
+    {
+      scenario: "Фідбек одногрупнику",
+      text: "Робота однокурсника явно слабка. Група чекає твоєї думки. Що кажеш?",
+      options: [
+        { t: "«Це просто погано» — без пояснень", s: -2 },
+        { t: "Мовчу, щоб нікого не образити", s: -1 },
+        { t: "Кажу прямо, що не працює і чому — про роботу, не про людину", s: 2 },
+        { t: "Хвалю, навіть якщо думаю інакше", s: 0 },
+      ]
+    },
+    {
+      scenario: "Закон «завжди можна краще»",
+      text: "Викладач вчетверте просить переробити той самий елемент роботи.",
+      options: [
+        { t: "Дратуюсь, кажу що це вже занадто", s: -1 },
+        { t: "Сприймаю як частину процесу, питаю конкретний напрямок", s: 2 },
+        { t: "Погоджуюсь мовчки, але внутрішньо злюсь на всіх", s: -1 },
+        { t: "Ігнорую зауваження, роблю по-своєму", s: -1 },
+      ]
+    },
+    {
+      scenario: "Портфоліо провалів",
+      text: "Потрібно показати групі свою невдалу роботу — за форматом вправи курсу.",
+      options: [
+        { t: "Уникаю, показую тільки найкраще", s: -1 },
+        { t: "Показую, коротко пояснюю, що не спрацювало", s: 2 },
+        { t: "Показую, але звинувачую обставини й матеріали", s: -1 },
+        { t: "Відмовляюсь брати участь у вправі", s: -2 },
+      ]
+    },
+    {
+      scenario: "Конфлікт думок у групі",
+      text: "Двоє одногрупників сперечаються про твою роботу з протилежними порадами.",
+      options: [
+        { t: "Злюсь, що ніхто не може дати однозначну відповідь", s: -1 },
+        { t: "Дякую обом, вирішую сам, що ближче до мого брифу", s: 2 },
+        { t: "Стаю на бік того, хто похвалив", s: 0 },
+        { t: "Публічно кажу, що обидва не розуміються на дизайні", s: -2 },
+      ]
+    },
+    {
+      scenario: "Чат потоку",
+      text: "В груповому чаті хтось написав різкий коментар на твою роботу без пояснень.",
+      options: [
+        { t: "Відповідаю так само різко", s: -2 },
+        { t: "Прошу уточнити конкретику", s: 2 },
+        { t: "Ігнорую, нічого не відповідаю", s: 0 },
+        { t: "Скаржусь викладачу, не спробувавши розібратись", s: -1 },
+      ]
+    },
+    {
+      scenario: "Твоє визначення",
+      text: "Що для тебе означає «чесний фідбек»?",
+      options: [
+        { t: "Казати все, що думаю, без фільтру, навіть якщо боляче", s: -1 },
+        { t: "Точно називати, що не працює в роботі й чому — без оцінки людини", s: 2 },
+        { t: "М'яко натякати, щоб не образити", s: 0 },
+        { t: "Уникати критики, хвалити завжди", s: -1 },
+      ]
+    },
+  ];
+
+  let current = 0;
+  let score = 0;
+  let flags = 0;
+  let userName = "";
+  let userEmail = "";
+
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  function startQuiz(){
+    userName = document.getElementById('inName').value.trim();
+    userEmail = document.getElementById('inEmail').value.trim();
+    const err = document.getElementById('introError');
+    if(!userName || !userEmail || !userEmail.includes('@')){
+      err.textContent = "Заповни ім'я та коректний email — вони потрібні, щоб ми могли зв'язатись щодо результату.";
+      return;
+    }
+    err.textContent = "";
+    current = 0; score = 0; flags = 0;
+    show('screen-quiz');
+    renderQuestion();
+  }
+
+  function renderQuestion(){
+    const q = questions[current];
+    document.getElementById('progressFill').style.width = (current/questions.length*100) + '%';
+    document.getElementById('qCounter').textContent = `Питання ${current+1} з ${questions.length}`;
+    document.getElementById('qScenario').textContent = q.scenario;
+    document.getElementById('qText').textContent = q.text;
+    const opts = document.getElementById('qOptions');
+    opts.innerHTML = '';
+    const letters = ['A','B','C','D'];
+    q.options.forEach((opt, i)=>{
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt.t}`;
+      btn.onclick = ()=>answer(opt.s);
+      opts.appendChild(btn);
+    });
+  }
+
+  function answer(s){
+    score += s;
+    if(s <= -2) flags++;
+    current++;
+    if(current < questions.length){
+      renderQuestion();
+    } else {
+      document.getElementById('progressFill').style.width = '100%';
+      showResult();
+    }
+  }
+
+  async function showResult(){
+    // Зберігаємо результат у Supabase (якщо підключення налаштоване)
+    if(supabaseClient){
+      try{
+        await supabaseClient.from('screening_results').insert({
+          name: userName,
+          email: userEmail,
+          score: score,
+          flags: flags,
+          level: flags >= 2 ? 'flag' : (score >= 9 ? 'pass' : 'mid'),
+        });
+      } catch(e){
+        console.warn('Supabase insert failed', e);
+      }
+    }
+
+    const badge = document.getElementById('resultBadge');
+    const text = document.getElementById('resultText');
+    const cta = document.getElementById('resultCta');
+    document.getElementById('resultScore').textContent = (score>0?'+':'') + score;
+
+    let level, msg, ctaHtml;
+    if(flags >= 2){
+      level = 'flag';
+      msg = `Кілька відповідей показують ризик переходу «на людину» замість роботи в напружений момент. Це не автоматична відмова — це сигнал, що перед стартом варто коротко поговорити особисто, щоб зрозуміти контекст.`;
+      ctaHtml = `<a class="btn" href="mailto:hello@newera-design.example?subject=Скринінг%20NEW%20ERA%20—%20результат%20${score}&body=Результат%20тесту:%20${score}%20з%2014.%20Прошу%20призначити%20коротку%20розмову%20перед%20стартом.">Запланувати коротку розмову</a>`;
+    } else if(score >= 9){
+      level = 'pass';
+      msg = `Ти реагуєш на критику по суті, а не по людині — саме та культура, на якій тримається курс. Готові переходити до заявки.`;
+      ctaHtml = `<a class="btn" href="index.html#cta">Подати заявку на курс</a><a class="btn btn-ghost" href="index.html">На головну</a>`;
+    } else {
+      level = 'mid';
+      msg = `В цілому нормально, є куди рости в сприйнятті прямого фідбеку — це природно і не заважає навчанню. Запрошуємо на коротку співбесіду перед стартом потоку, просто щоб познайомитись заздалегідь.`;
+      ctaHtml = `<a class="btn" href="mailto:hello@newera-design.example?subject=Скринінг%20NEW%20ERA%20—%20результат%20${score}&body=Результат%20тесту:%20${score}%20з%2014.">Записатись на співбесіду</a>`;
+    }
+    badge.className = 'result-badge badge-' + level;
+    badge.textContent = level === 'pass' ? '✓ Готовий(-а) до критики' : level === 'mid' ? '~ Потрібна коротка розмова' : '! Рекомендована особиста розмова';
+    text.innerHTML = msg;
+    cta.innerHTML = ctaHtml;
+    show('screen-result');
+  }
+</script>
+
+</body>
+</html>
