@@ -94,12 +94,17 @@
 
   /* HERO */
   .hero{padding:130px 0 70px; position:relative; overflow:hidden;}
-  .hero .glow-a{width:520px; height:520px; background:var(--red); opacity:.22; top:-180px; right:-140px;}
-  .hero .glow-b{width:420px; height:420px; background:var(--violet); opacity:.2; top:200px; left:-160px;}
+  .hero-bg-video{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;
+  }
+  .hero-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(10,10,15,.55) 0%, rgba(10,10,15,.82) 65%, var(--bg) 100%);
+  }
 
   .brain-holo{
     position:absolute; top:50%; right:-6%; transform:translateY(-50%);
-    width:min(760px,62vw); height:auto; z-index:0; opacity:.55;
+    width:min(760px,62vw); height:auto; z-index:1; opacity:.55;
     mix-blend-mode:screen; pointer-events:none;
   }
   @media(max-width:900px){.brain-holo{opacity:.28; right:-20%;}}
@@ -270,6 +275,8 @@
 <div class="practice-backdrop" id="practiceBackdrop"></div>
 
 <header class="hero">
+  <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" src="hero-teaser.mp4"></video>
+  <div class="hero-overlay"></div>
   <div class="glow glow-a"></div>
   <div class="glow glow-b"></div>
 
