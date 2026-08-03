@@ -228,7 +228,12 @@
     if(e.key === 'Enter') sendMagicLink();
   });
 
-  checkAccess();
+  // ТИМЧАСОВО (поки що): гейт вимкнено, доступ відкритий напряму для роботи з блоками.
+  // Щоб повернути логін — розкоментуй checkAccess() і прибери блок нижче.
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('app').classList.add('unlocked');
+  initApp();
+  // checkAccess();
 
   const courseData = JSON.parse(document.getElementById('course-data').textContent);
   let currentIndex = 0;
